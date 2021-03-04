@@ -3,26 +3,34 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
-  "plugins": ["@typescript-eslint", "import", "prettier"],
+  "plugins": ["react", "@typescript-eslint", "prettier", "jsx-a11y", "import"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended",
     "plugin:prettier/recommended",
+    "plugin:react/recommended",
     "prettier/@typescript-eslint"
   ],
   "rules": {
     "@typescript-eslint/ban-ts-comment": 1,
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react/prop-types": 0,
+    "react/react-in-jsx-scope": 0,
     "import/order": [
       2,
       {
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        },
         "groups": [
           ["external", "builtin"],
           "internal",
@@ -31,7 +39,18 @@
           "index"
         ],
         "newlines-between": "never",
-        "pathGroupsExcludedImportTypes": ["external, builtin"]
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "pathGroupsExcludedImportTypes": ["react*", "external, builtin"],
+        "pathGroups": [
+          {
+            "pattern": "react*",
+            "group": "external",
+            "position": "before"
+          }
+        ]
       }
     ]
   }
