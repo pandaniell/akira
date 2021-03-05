@@ -64,7 +64,7 @@
     "apollo-server-fastify": "^3.0.0-alpha.3",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "fastify": "^3.11.0",
+    "fastify": "^3.13.0",
     "fastify-cookie": "^5.1.0",
     "fastify-cors": "^5.2.0",
     "fastify-passport": "^0.3.0",
