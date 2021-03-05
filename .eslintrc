@@ -21,7 +21,7 @@
     "plugin:jsx-a11y/recommended",
     "plugin:prettier/recommended",
     "plugin:react/recommended",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "rules": {
     "@typescript-eslint/ban-ts-comment": 1,
