@@ -1,11 +1,6 @@
 import { Fragment } from "react"
 import Head from "next/head"
-import styled from "styled-components"
-
-const Title = styled.h1`
-  font-size: 50px;
-  color: ${({ theme }) => theme.colors.primary};
-`
+import Hero from "../components/Hero"
 
 const Home = () => (
   <Fragment>
@@ -16,7 +11,7 @@ const Home = () => (
         content="🤖 Akira is a multipurpose Discord bot."
       />
     </Head>
-    <Title>My page</Title>
+    <Hero />
   </Fragment>
 )
 
