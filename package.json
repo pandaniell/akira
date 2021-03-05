@@ -57,7 +57,7 @@
     ]
   },
   "dependencies": {
-    "@elastic/ecs-pino-format": "^0.2.0",
+    "@elastic/ecs-pino-format": "^1.0.0",
     "@mgcrea/fastify-session": "^0.11.2",
     "@mgcrea/fastify-session-redis-store": "^0.9.1",
     "@prisma/client": "^2.15.0",
