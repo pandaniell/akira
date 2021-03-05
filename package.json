@@ -67,7 +67,7 @@
     "fastify": "^3.13.0",
     "fastify-cookie": "^5.1.0",
     "fastify-cors": "^5.2.0",
-    "fastify-passport": "^0.3.0",
+    "fastify-passport": "^0.4.2",
     "glob": "^7.1.6",
     "graphql": "^15.5.0",
     "graphql-middleware": "^6.0.2",
