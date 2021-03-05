@@ -77,7 +77,7 @@
     "ioredis": "^4.23.0",
     "make-promises-safe": "^5.1.0",
     "nexus": "^1.0.0",
-    "nexus-plugin-prisma": "^0.29.0",
+    "nexus-plugin-prisma": "^0.31.0",
     "passport-discord": "^0.1.4",
     "pino": "^6.11.0",
     "pino-elasticsearch": "^5.4.0",
