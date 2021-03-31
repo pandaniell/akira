@@ -1,9 +1,10 @@
-import { useTransform, useViewportScroll } from "framer-motion"
 import React, { useEffect } from "react"
+import { useTransform, useViewportScroll } from "framer-motion"
 import * as SC from "./styles"
 
 const Dashboard = () => {
-  const [display, setDisplay] = React.useState("visible")
+  const [display, setDisplay] = React.useState<VisibilityState>("visible")
+
   const { scrollYProgress } = useViewportScroll()
   const opac = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1, 0])
 
@@ -93,15 +94,11 @@ const LeftPanel = () => {
 }
 
 const LeftPanelGlass = () => {
-  const [ffLayer, setFfLayer] = React.useState(0)
   const { scrollYProgress } = useViewportScroll()
   const scaleAnim = useTransform(scrollYProgress, [0, 0.1, 0.4], [0, 0.2, 1])
   const xPosAnim = useTransform(scrollYProgress, [0, 0.1, 0.1], [-300, 0, 0])
   const zRotAnim = useTransform(scrollYProgress, [0, 0.1, 0.4], [0, 3, 0])
 
-  scrollYProgress.onChange(x => {
-    setFfLayer(x > 0.4 ? -1 : 0)
-  })
   return (
     <SC.LeftPanelGlassStyle
       style={{
@@ -155,7 +152,11 @@ const MiddlePanel = () => {
             <SC.Text2></SC.Text2>
           </div>
 
-          <SC.JoinButton bg="#56EEAE" style={{ opacity: opac }} id="button">
+          <SC.JoinButton
+            bg="#56EEAE"
+            style={{ opacity: (opac as unknown) as number }}
+            id="button"
+          >
             Join
           </SC.JoinButton>
         </SC.ProfileSkeleton>
@@ -194,11 +195,17 @@ const MiddlePanel = () => {
   )
 }
 
-const ProfileSkeleton = props => {
+const ProfileSkeleton = (props: {
+  inputColor?: string
+  isShown1?: boolean
+  isShown2?: boolean
+}) => {
   return (
     <SC.ProfileSkeletonRight>
       <SC.ProfileCircle>
-        <SC.ProfileStatus inputColor={props.inputColor} />
+        <SC.ProfileStatus
+          inputColor={(props.inputColor as unknown) as string}
+        />
       </SC.ProfileCircle>
       <div className="data-skeleton">
         <SC.Text3 />
@@ -208,16 +215,11 @@ const ProfileSkeleton = props => {
   )
 }
 
-const RightPanel = props => {
-  const [ffLayer, setFfLayer] = React.useState(0)
+const RightPanel = (props: { isShown?: boolean }) => {
   const { scrollYProgress } = useViewportScroll()
   const scaleAnim = useTransform(scrollYProgress, [0, 0.1, 0.4], [0, 0.2, 1])
   const xPosAnim = useTransform(scrollYProgress, [0, 0.5, 1], [200, 0, 0])
   const zRotAnim = useTransform(scrollYProgress, [0, 0.1, 0.4], [0, 6, 0])
-
-  scrollYProgress.onChange(x => {
-    setFfLayer(x > 0.4 ? -1 : 0)
-  })
 
   return (
     <SC.RightPanelStyle

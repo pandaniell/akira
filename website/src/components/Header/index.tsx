@@ -7,11 +7,7 @@ interface IMenuItemProps {
 
 const MenuItem: FC<IMenuItemProps> = ({ children, to }) => {
   return (
-    <SC.MenuItem
-      to={to}
-      activeClassName="active"
-      className={to === "/" ? "disabled" : ""}
-    >
+    <SC.MenuItem href={to} className={to === "/" ? "disabled" : ""}>
       <SC.MenuItemText>{children}</SC.MenuItemText>
     </SC.MenuItem>
   )
@@ -53,6 +49,7 @@ const Header = () => {
           <img
             src="https://i.ibb.co/48HZKvs/logo.png"
             style={{ maxWidth: "100%", maxHeight: "100%" }}
+            alt="Logo"
           />
         </SC.Logo>
       </SC.FlexHeading>

@@ -1,9 +1,9 @@
 import React from "react"
-import Header from "./Header"
 import { motion, useViewportScroll, useTransform } from "framer-motion"
 import styled from "styled-components"
 import Dashboard from "./Dashboard"
 import Features from "./Features"
+import Header from "./Header"
 
 const SceneStyle = styled.div`
   height: 100vh;

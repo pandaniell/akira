@@ -1,5 +1,4 @@
 import { createGlobalStyle } from "styled-components"
-
 import { BASE_FONT_SIZE, fontFamily } from "./design/typography"
 
 export const GlobalStyles = createGlobalStyle`

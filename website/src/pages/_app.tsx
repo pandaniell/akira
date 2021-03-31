@@ -3,7 +3,6 @@ import type { AppProps } from "next/app"
 import Head from "next/head"
 import { GlobalStyles } from "../globalStyle"
 import { ThemeProvider } from "../ThemeProvider"
-import { darkTheme } from "../design/theme"
 
 const App = ({ Component, pageProps }: AppProps) => (
   <Fragment>
@@ -11,7 +10,7 @@ const App = ({ Component, pageProps }: AppProps) => (
       <meta content="width=device-width, initial-scale=1" name="viewport" />
     </Head>
     <GlobalStyles />
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider>
       <Component {...pageProps} />
     </ThemeProvider>
   </Fragment>

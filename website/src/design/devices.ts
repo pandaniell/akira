@@ -6,7 +6,7 @@ interface ISize {
   laptop: string
   laptopL: string
   desktop: string
-  [propName: string]: any
+  [propName: string]: unknown
 }
 const size: ISize = {
   mobileS: "320px",

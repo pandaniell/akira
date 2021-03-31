@@ -1,6 +1,5 @@
 import React, { FC } from "react"
 import { ThemeProvider as BaseThemeProvider } from "styled-components"
-
 import { darkTheme } from "./design/theme"
 
 interface IScopedDownChildren {

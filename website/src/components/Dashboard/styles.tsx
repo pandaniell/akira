@@ -152,7 +152,7 @@ export const Row = styled(motion.div)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: ${props => props.mt || "null"};
+  margin-top: ${(props: { mt?: string }) => props.mt || "null"};
 `
 
 export const VoiceChannel2 = styled(motion.div)`
@@ -259,7 +259,8 @@ export const ProfileCircle = styled(motion.div)`
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: ${props => props.inputColor || "#1e0f39"};
+  background-color: ${(props: { inputColor?: string }) =>
+    props.inputColor || "#1e0f39"};
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
@@ -312,7 +313,7 @@ export const Box = styled(motion.div)`
   -o-border-radius: 20px;
 `
 
-export const JoinButton = styled.button`
+export const JoinButton = styled.button<{ bg: string }>`
   border-radius: 8px;
   cursor: pointer;
   font-size: 1em;
@@ -357,7 +358,8 @@ export const ProfileStatus = styled(motion.div)`
   position: absolute;
   width: 7px;
   height: 7px;
-  background-color: ${props => props.inputColor || "#79ff87"};
+  background-color: ${(props: { inputColor: string }) =>
+    props.inputColor || "#79ff87"};
   border: solid 1px #322641;
   bottom: 0;
   right: 2px;
