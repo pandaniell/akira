@@ -60,7 +60,7 @@
     "@elastic/ecs-pino-format": "^1.1.1",
     "@mgcrea/fastify-session": "^0.13.0",
     "@mgcrea/fastify-session-redis-store": "^0.9.1",
-    "@prisma/client": "^2.18.0",
+    "@prisma/client": "^2.20.1",
     "apollo-server-fastify": "^3.0.0-alpha.3",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
