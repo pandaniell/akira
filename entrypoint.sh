@@ -1,2 +1,2 @@
 #!/bin/sh
-node dist/worker.js 2>&1
+node dist/index.js 2>&1
