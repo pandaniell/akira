@@ -62,7 +62,7 @@
     "@mgcrea/fastify-session-redis-store": "^0.9.1",
     "@prisma/client": "^2.20.1",
     "apollo-server-fastify": "^3.0.0-alpha.3",
-    "discord.js": "^12.5.1",
+    "discord.js": "^12.5.3",
     "dotenv": "^8.2.0",
     "fastify": "^3.14.1",
     "fastify-cookie": "^5.3.0",
