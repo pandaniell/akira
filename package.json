@@ -51,7 +51,7 @@
     "**/*.{md}": [
       "prettier --write"
     ],
-    "**/*.{ts,json}": [
+    "**/*.{ts,tsx,json}": [
       "prettier --write",
       "eslint --fix"
     ]
