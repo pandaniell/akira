@@ -3,6 +3,6 @@
 !./locales
 !./prisma
 !./src
-!./entrypoint*.sh
+!./entrypoint.sh
 !./package*.json
 !./tsconfig.json

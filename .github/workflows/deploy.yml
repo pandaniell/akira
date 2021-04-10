@@ -19,9 +19,9 @@ jobs:
       - name: Push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:push --recursive -a akira-bot-discord
+        run: heroku container:push -a akira-bot-discord worker
 
       - name: Release
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release web worker -a akira-bot-discord
+        run: heroku container:release -a akira-bot-discord worker
