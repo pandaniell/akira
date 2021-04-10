@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
-    "@commitlint/config-angular": "^12.0.1",
+    "@commitlint/config-angular": "^12.1.1",
     "@types/glob": "^7.1.3",
     "@types/i18next-fs-backend": "^1.0.0",
     "@types/ioredis": "^4.22.2",
