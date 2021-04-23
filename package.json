@@ -79,7 +79,7 @@
     "nexus": "^1.0.0",
     "nexus-plugin-prisma": "^0.34.1",
     "passport-discord": "^0.1.4",
-    "pino": "^6.11.2",
+    "pino": "^6.11.3",
     "pino-elasticsearch": "^5.4.0",
     "tslib": "^2.2.0"
   },
