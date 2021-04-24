@@ -21,6 +21,8 @@ COPY --from=builder /usr/src/app/entrypoint.sh .
 COPY --from=builder /usr/src/app/package*.json ./
 RUN chmod +x ./entrypoint.sh
 RUN npm i --only=prod --ignore-scripts
+# Prisma is generally considered a dev dependency
+RUN npm i --save-dev prisma
 RUN npx --no-install prisma generate
 USER node
 ENV NODE_ENV=production
