@@ -18,8 +18,8 @@
     "build": "rimraf dist && NODE_ENV=development npm run nexus:reflect && tsc",
     "gen-env-types": "gen-env-types .env -o @types/node/index.d.ts -e .",
     "postinstall": "husky install",
-    "migrate": "DATABASE_URL=$(heroku config:get DATABASE_URL -a akira-bot-discord) prisma migrate deploy --preview-feature",
-    "migrate:dev": "prisma migrate dev --create-only --preview-feature",
+    "migrate": "DATABASE_URL=$(heroku config:get DATABASE_URL -a akira-bot-discord) prisma migrate deploy",
+    "migrate:dev": "prisma migrate dev --create-only",
     "nexus:reflect": "SHOULD_EXIT_AFTER_GENERATE_ARTIFACTS=true ts-node --transpile-only src/schema.ts",
     "start": "NODE_ENV=development nodemon --transpile-only src/index.ts | pino-pretty"
   },
