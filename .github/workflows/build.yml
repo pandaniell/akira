@@ -18,7 +18,7 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout repo
-      - uses: actions/checkout@master
+        uses: actions/checkout@master
 
       - name: Build Docker image
         run: docker build -f Dockerfile -t daniellwdb/akira .
