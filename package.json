@@ -3,16 +3,16 @@
   "version": "2.1.1",
   "private": true,
   "description": "🤖 Akira is a multipurpose Discord bot.",
-  "homepage": "https://github.com/pandaniell/akira#readme",
+  "homepage": "https://github.com/daniellwdb/akira#readme",
   "bugs": {
-    "url": "https://github.com/pandaniell/akira/issues"
+    "url": "https://github.com/daniellwdb/akira/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pandaniell/akira.git"
+    "url": "git+https://github.com/daniellwdb/akira.git"
   },
   "license": "MIT",
-  "author": "pandaniell <daniell.wdb@icloud.com>",
+  "author": "Daniell Wijdenbosch <daniellwdb@icloud.com>",
   "main": "dist/index.js",
   "scripts": {
     "build": "rimraf dist && NODE_ENV=development npm run nexus:reflect && tsc",
