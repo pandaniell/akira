@@ -1,18 +1,24 @@
 name: Node.js CI
 
-on: 
+on:
   push:
     branches-ignore:
       - "v*.*.*"
   pull_request:
     branches:
-      - 'main'
+      - "main"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout repo
       - uses: actions/checkout@master
 
       - name: Build Docker image
-        run: docker build -f Dockerfile -t pandaniell/akira .
+        run: docker build -f Dockerfile -t daniellwdb/akira .
