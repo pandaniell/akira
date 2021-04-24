@@ -109,7 +109,7 @@ const main = async () => {
         domain: process.env.COOKIE_DOMAIN,
         httpOnly: true,
         maxAge: SESSION_TTL,
-        sameSite: "lax",
+        sameSite: "strict",
         secure: true,
       },
       saveUninitialized: false,
