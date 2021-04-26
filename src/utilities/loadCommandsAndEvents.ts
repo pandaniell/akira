@@ -10,7 +10,7 @@ import { parse, sep } from "path"
 import { logger } from "./logger"
 import { globAsync } from "./misc"
 
-interface CommandExample {
+type CommandExample = {
   usage: string
   description: string
 }
@@ -39,7 +39,7 @@ export type Command<Args = void> = {
   // eslint-disable-next-line @typescript-eslint/ban-types
 } & (Args extends void ? {} : CommandWithArgsProps<Args>)
 
-export interface Event<T extends keyof ClientEvents> {
+export type Event<T extends keyof ClientEvents> = {
   eventName?: T
   listenOnce?: boolean
   run(
@@ -52,17 +52,17 @@ export interface Event<T extends keyof ClientEvents> {
   ): Promise<unknown>
 }
 
-interface CommandModule {
+type CommandModule = {
   command: Command<unknown>
 }
 
-interface EventModule {
+type EventModule = {
   event: Event<keyof ClientEvents>
 }
 
 type Module = CommandModule | EventModule
 
-interface BaseDirectories {
+type BaseDirectories = {
   commandsBaseDir: string
   eventsBaseDir: string
 }
@@ -74,7 +74,7 @@ type EventWithRequiredEventName = Omit<
   eventName: NonNullable<Event<keyof ClientEvents>["eventName"]>
 }
 
-interface CommandsAndEvents {
+type CommandsAndEvents = {
   commands: Map<string, Command<unknown>>
   events: Array<EventWithRequiredEventName>
 }
