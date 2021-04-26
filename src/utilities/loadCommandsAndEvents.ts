@@ -96,8 +96,8 @@ export const loadCommandsAndEvents = async ({
   )
 
   const commandsAndEvents = filePaths.reduce<Promise<CommandsAndEvents>>(
-    async (accumulator, path) => {
-      const { commands, events } = await accumulator
+    async (previousValues, path) => {
+      const { commands, events } = await previousValues
       const module: Module = await import(path)
       const parsedPath = parse(path)
 
