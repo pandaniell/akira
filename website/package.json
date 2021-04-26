@@ -1,24 +1,23 @@
 {
-  "name": "@akira/website",
+  "name": "website",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
     "dev": "next dev",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.6.0",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.3.0",
     "framer-motion": "^4.1.9",
     "next": "10.1.3",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "styled-components": "^5.2.3"
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "@types/node": "^14.14.41",
     "@types/react": "^17.0.3",
-    "@types/styled-components": "^5.1.9",
-    "babel-plugin-styled-components": "^1.12.0",
     "typescript": "^4.2.4"
   }
 }

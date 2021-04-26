@@ -5,33 +5,12 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document"
-import { ServerStyleSheet } from "styled-components"
 
 class CustomDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet()
-    const originalRenderPage = ctx.renderPage
+    const initialProps = await Document.getInitialProps(ctx)
 
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
-        })
-
-      const initialProps = await Document.getInitialProps(ctx)
-
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      }
-    } finally {
-      sheet.seal()
-    }
+    return { ...initialProps }
   }
 
   render() {
@@ -55,15 +34,14 @@ class CustomDocument extends Document {
             sizes="16x16"
             type="image/png"
           />
-          <link href="/static/favicons/site.webmanifest" rel="manifest" />
-          <link href="/static/favicons/favicon.ico" rel="shortcut icon" />
           <link
             color="#267ac0"
             href="/static/favicons/safari-pinned-tab.svg"
             rel="mask-icon"
           />
+          <link href="/static/favicons/site.webmanifest" rel="manifest" />
+          <link href="/static/favicons/favicon.ico" rel="shortcut icon" />
           <meta content="#2d89ef" name="msapplication-TileColor" />
-          <meta content="#267ac0" name="theme-color" />
           <meta
             content="/static/favicons/browserconfig.xml"
             name="msapplication-config"
