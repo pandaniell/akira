@@ -110,10 +110,10 @@ const main = async () => {
         httpOnly: true,
         maxAge: SESSION_TTL,
         sameSite: "strict",
-        secure: true,
+        secure: !__DEV__,
       },
+      key: Buffer.from(process.env.SESSION_KEY, "base64"),
       saveUninitialized: false,
-      secret: process.env.SESSION_SECRET,
     })
     .register(fastifyPassport.initialize())
     .register(fastifyPassport.secureSession())
