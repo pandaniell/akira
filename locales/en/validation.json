@@ -1,0 +1,11 @@
+{
+  "command": {
+    "invalid": "**{{command}}** is not a valid command",
+    "suggestion": ", did you mean: **{{suggested}}**?\nYou can send `{{prefix}}help {{suggested}}` for more information about this command",
+    "usage": "Invalid argument(s) provided for this command, the correct usage would be: `{{prefix}}{{command}} <{{usage}}>`"
+  },
+  "permissions": {
+    "client": "I am missing (a) permission(s) to run this command: `{{permissions}}`",
+    "user": "You are missing (a) permission(s) to run this command: `{{permissions}}`"
+  }
+}

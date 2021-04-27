@@ -9,11 +9,12 @@ import fastify from "fastify"
 import fastifyCookie from "fastify-cookie"
 import fastifyCors from "fastify-cors"
 import fastifyPassport from "fastify-passport"
+import fs from "fs/promises"
 import { applyMiddleware } from "graphql-middleware"
 import i18next from "i18next"
 import Backend from "i18next-fs-backend"
 import Strategy, { Profile } from "passport-discord"
-import { join } from "path"
+import { join, parse } from "path"
 import { __DEV__, COOKIE_NAME, SESSION_TTL } from "./constants"
 import type { Context } from "./context"
 import { permissions } from "./permissions"
@@ -36,14 +37,24 @@ const main = async () => {
       keys: ["prefix", "language"],
       defaultValues: {
         prefix: process.env.PREFIX,
-        language: Language.ENGLISH,
+        language: Language.en,
       },
       ttlInSeconds: 15,
     })
   )
 
+  const paths = await globAsync(`${join(process.cwd(), "locales")}/**/*.json`)
+
+  const namespaces = paths.map(path => {
+    const { name } = parse(path)
+
+    return name
+  })
+
   await i18next.use(Backend).init({
-    preload: await globAsync(`${join(process.cwd(), "locales")}/**/*.json`),
+    preload: await fs.readdir(join(process.cwd(), "locales")),
+    fallbackLng: Language.en,
+    ns: [...new Set(namespaces)],
     backend: {
       loadPath: join(process.cwd(), "locales", "{{lng}}", "{{ns}}.json"),
     },

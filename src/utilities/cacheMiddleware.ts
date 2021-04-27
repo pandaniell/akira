@@ -34,22 +34,24 @@ export const cacheMiddleware = ({
   let result
   const key = `${params.model}:${params.action}:${JSON.stringify(params.args)}`
 
+  await redis.del(key)
   result = await redis.hgetall(key)
 
   if (!Object.keys(result).length) {
     try {
       result = await next(params)
     } catch (err) {
-      if (err.name !== "NotFoundError" || !defaultValues) {
+      if (err.name !== "NotFoundError") {
+        throw err
+      }
+
+      if (!defaultValues) {
         throw new Error(
           `${err.message}. Either handle the case of undefined by removing \`rejectOnNotFound\` or pass in \`defaultValues\`.`
         )
       }
-    } finally {
-      // If statement to fix possibly undefined error at `hmset` below, shouldn't be undefined because of the check above
-      if (defaultValues) {
-        result = defaultValues
-      }
+
+      result = defaultValues
     }
 
     await redis.hmset(key, result)
