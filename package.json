@@ -21,13 +21,37 @@
     "migrate": "DATABASE_URL=$(heroku config:get DATABASE_URL -a akira-bot-discord) prisma migrate deploy",
     "migrate:dev": "prisma migrate dev --create-only",
     "nexus:reflect": "SHOULD_EXIT_AFTER_GENERATE_ARTIFACTS=true ts-node --transpile-only src/schema.ts",
-    "start": "NODE_ENV=development nodemon --transpile-only src/index.ts | pino-pretty"
+    "start": "NODE_ENV=development nodemon --transpile-only src/index.ts | pino-pretty",
+    "commit": "commit"
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-angular"
     ],
     "rules": {
+      "subject-case": [
+        2,
+        "always",
+        "lower-case"
+      ],
+      "scope-case": [
+        2,
+        "always",
+        "lower-case"
+      ],
+      "scope-enum": [
+        2,
+        "always",
+        [
+          "akira",
+          "website"
+        ]
+      ],
+      "type-case": [
+        2,
+        "always",
+        "lower-case"
+      ],
       "type-enum": [
         2,
         "always",
@@ -86,6 +110,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-angular": "^12.1.1",
+    "@commitlint/prompt-cli": "^12.1.1",
     "@types/glob": "^7.1.3",
     "@types/i18next-fs-backend": "^1.0.0",
     "@types/ioredis": "^4.26.0",
