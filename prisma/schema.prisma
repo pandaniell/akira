@@ -12,15 +12,15 @@ generator client {
 
 model Guild {
   id        String   @id
-  prefix    String   @default(value: "!a")
+  prefix    String   @default(value: "!a ")
   language  Language @default(ENGLISH)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  @@map(name: "guilds")
+  @@map("guilds")
 }
 
 enum Language {
-  ENGLISH  @map(name: "en")
-  DUTCH    @map(name: "nl")
+  ENGLISH  @map("en")
+  DUTCH    @map("nl")
 }
