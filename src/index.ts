@@ -1,6 +1,6 @@
 import fastifySession from "@mgcrea/fastify-session"
 import RedisStore from "@mgcrea/fastify-session-redis-store"
-import { PrismaClient } from "@prisma/client"
+import { Language, PrismaClient } from "@prisma/client"
 import { ApolloServer } from "apollo-server-fastify"
 import { Intents, Client } from "discord.js"
 import "dotenv/config"
@@ -12,21 +12,35 @@ import fastifyPassport from "fastify-passport"
 import { applyMiddleware } from "graphql-middleware"
 import i18next from "i18next"
 import Backend from "i18next-fs-backend"
-import Redis from "ioredis"
 import Strategy, { Profile } from "passport-discord"
 import { join } from "path"
 import { __DEV__, COOKIE_NAME, SESSION_TTL } from "./constants"
 import type { Context } from "./context"
 import { permissions } from "./permissions"
+import { redis } from "./redis"
 import { schema } from "./schema"
+import { cacheMiddleware } from "./utilities/cacheMiddleware"
 import { loadCommandsAndEvents } from "./utilities/loadCommandsAndEvents"
 import { logger } from "./utilities/logger"
 import { globAsync } from "./utilities/misc"
 
 const main = async () => {
   const prisma = new PrismaClient({
-    log: __DEV__ ? ["query"] : ["info", "warn"],
+    log: __DEV__ ? ["query", "error"] : ["info", "warn"],
   })
+
+  prisma.$use(
+    cacheMiddleware({
+      model: "Guild",
+      action: "findUnique",
+      keys: ["prefix", "language"],
+      defaultValues: {
+        prefix: process.env.PREFIX,
+        language: Language.ENGLISH,
+      },
+      ttlInSeconds: 15,
+    })
+  )
 
   await i18next.use(Backend).init({
     preload: await globAsync(`${join(process.cwd(), "locales")}/**/*.json`),
@@ -102,7 +116,7 @@ const main = async () => {
     .register(fastifySession, {
       cookieName: COOKIE_NAME,
       store: new RedisStore({
-        client: new Redis(process.env.REDIS_URL),
+        client: redis,
         ttl: SESSION_TTL,
       }),
       cookie: {

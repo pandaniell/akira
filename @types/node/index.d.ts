@@ -1,5 +1,6 @@
 declare namespace NodeJS {
   interface ProcessEnv {
+    PREFIX: string
     CLIENT_ID: string
     CLIENT_SECRET: string
     TOKEN: string

@@ -1,4 +1,3 @@
-import { Language } from "@prisma/client"
 import i18next from "i18next"
 import type { Event } from "../utilities/loadCommandsAndEvents"
 import { logger } from "../utilities/logger"
@@ -17,7 +16,7 @@ export const event: Event<"message"> = {
       return
     }
 
-    const config = (await prisma.guild.findUnique({
+    const config = await prisma.guild.findUnique({
       where: {
         id: guild.id,
       },
@@ -25,10 +24,8 @@ export const event: Event<"message"> = {
         prefix: true,
         language: true,
       },
-    })) ?? {
-      prefix: "!a",
-      language: Language.ENGLISH,
-    }
+      rejectOnNotFound: true,
+    })
 
     const [commandName, ...args] = content
       .slice(config.prefix.length)
