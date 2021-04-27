@@ -1,6 +1,6 @@
+import Fuse from "fuse.js"
 import i18next from "i18next"
 import type { Event } from "../utilities/loadCommandsAndEvents"
-import { logger } from "../utilities/logger"
 
 export const event: Event<"message"> = {
   async run(message, _client, commands, prisma) {
@@ -36,10 +36,33 @@ export const event: Event<"message"> = {
       return
     }
 
+    const t = i18next.getFixedT(config.language)
+
     const command = commands.get(commandName.toLowerCase())
 
     if (!command) {
-      return logger.warn(`Command ${commandName} does not exist`)
+      // Do nothing if provided commandName only contains a single character
+      const isRepeatedChar = new Set([...commandName]).size === 1
+
+      if (isRepeatedChar) {
+        return
+      }
+
+      const fuse = new Fuse([...commands.keys()])
+      const [searchResult] = fuse.search(commandName.toLowerCase(), {
+        limit: 1,
+      })
+
+      let response = t("validation:command.invalid", { command: commandName })
+
+      if (searchResult) {
+        response += t("validation:command.suggestion", {
+          suggested: searchResult.item,
+          prefix: config.prefix,
+        })
+      }
+
+      return message.channel.send(response)
     }
 
     if (command.clientPermissions) {
@@ -48,7 +71,11 @@ export const event: Event<"message"> = {
       )
 
       if (missingPermissions.length) {
-        return logger.warn(`${client.user.username} is missing permissions`)
+        const response = t("validation:permissions.client", {
+          permissions: missingPermissions.join(", "),
+        })
+
+        return message.channel.send(response)
       }
     }
 
@@ -62,19 +89,25 @@ export const event: Event<"message"> = {
       )
 
       if (missingPermissions?.length) {
-        return logger.warn(`${author.username} is missing permissions`)
+        const response = t("validation:permissions.user", {
+          permissions: missingPermissions.join(", "),
+        })
+
+        return message.channel.send(response)
       }
     }
-
-    const t = i18next.getFixedT(config.language)
 
     if (command.args) {
       const resolvedArgs = await command.resolveArgs(args, message)
 
       if (!resolvedArgs && command.argsRequired) {
-        return logger.warn(
-          `Invalid argument(s) provided for this command, the correct usage would be: \`${config.prefix}${command.name} ${command.usage}\``
-        )
+        const response = t("validation:command.usage", {
+          prefix: config.prefix,
+          command: command.name,
+          usage: t(command.usage),
+        })
+
+        return message.channel.send(response)
       }
 
       return command.execute(message, resolvedArgs, prisma, t)
