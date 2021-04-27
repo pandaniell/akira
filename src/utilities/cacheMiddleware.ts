@@ -34,7 +34,6 @@ export const cacheMiddleware = ({
   let result
   const key = `${params.model}:${params.action}:${JSON.stringify(params.args)}`
 
-  await redis.del(key)
   result = await redis.hgetall(key)
 
   if (!Object.keys(result).length) {
