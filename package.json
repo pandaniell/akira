@@ -100,7 +100,7 @@
     "graphql-shield": "^7.5.0",
     "i18next": "^20.2.2",
     "i18next-fs-backend": "^1.1.1",
-    "ioredis": "^4.26.0",
+    "ioredis": "^4.27.1",
     "make-promises-safe": "^5.1.0",
     "nexus": "^1.0.0",
     "nexus-plugin-prisma": "^0.34.1",
