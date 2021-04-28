@@ -8,7 +8,13 @@
       "jsx": true
     }
   },
-  "plugins": ["react", "@typescript-eslint", "prettier", "jsx-a11y", "import"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "prettier",
+    "jsx-a11y",
+    "import"
+  ],
   "settings": {
     "react": {
       "version": "detect"
@@ -26,13 +32,17 @@
   "rules": {
     "@typescript-eslint/ban-ts-comment": 1,
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-console": "error",
     "react/prop-types": 0,
     "react/react-in-jsx-scope": 0,
     "import/order": [
       2,
       {
         "groups": [
-          ["external", "builtin"],
+          [
+            "external",
+            "builtin"
+          ],
           "internal",
           "parent",
           "sibling",
@@ -43,7 +53,10 @@
           "order": "asc",
           "caseInsensitive": true
         },
-        "pathGroupsExcludedImportTypes": ["react*", "external, builtin"],
+        "pathGroupsExcludedImportTypes": [
+          "react*",
+          "external, builtin"
+        ],
         "pathGroups": [
           {
             "pattern": "react*",
