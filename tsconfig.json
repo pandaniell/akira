@@ -12,8 +12,8 @@
     // "sourceMap": true,                     /* Generates corresponding '.map' file. */
     "outDir": "./dist" /* Redirect output structure to the directory. */,
     "rootDirs": [
-      "prisma",
-      "src"
+      "./prisma",
+      "./src"
     ] /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
     "importHelpers": true /* Import emit helpers from 'tslib'. */,
     "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
