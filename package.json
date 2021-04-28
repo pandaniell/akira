@@ -101,6 +101,7 @@
     "i18next": "^20.2.2",
     "i18next-fs-backend": "^1.1.1",
     "ioredis": "^4.27.1",
+    "lexure": "^0.17.0",
     "make-promises-safe": "^5.1.0",
     "nexus": "^1.0.0",
     "nexus-plugin-prisma": "^0.34.1",

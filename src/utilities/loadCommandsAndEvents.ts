@@ -6,6 +6,7 @@ import type {
   PermissionResolvable,
 } from "discord.js"
 import type { TFunction } from "i18next"
+import type { Args } from "lexure"
 import { parse, sep } from "path"
 import { logger } from "./logger"
 import { globAsync } from "./misc"
@@ -15,15 +16,14 @@ type CommandExample = {
   description: string
 }
 
-type CommandWithArgsProps<Args> = {
-  args: true
+type CommandWithArgsProps<T> = {
   argsRequired: boolean
   usage: string
   examples?: CommandExample[]
-  resolveArgs(args: string[], message: Message): Promise<Args>
+  resolveArgs(args: Args, message: Message): Promise<T>
 }
 
-export type Command<Args = void> = {
+export type Command<T = void> = {
   name?: string
   aliases?: string[]
   category?: string
@@ -32,12 +32,12 @@ export type Command<Args = void> = {
   memberPermissions?: PermissionResolvable[] | "same-as-client"
   execute(
     message: Message,
-    args: Args,
+    args: T,
     prisma: PrismaClient,
     t: TFunction
   ): Promise<unknown>
   // eslint-disable-next-line @typescript-eslint/ban-types
-} & (Args extends void ? {} : CommandWithArgsProps<Args>)
+} & (T extends void ? {} : CommandWithArgsProps<T>)
 
 export type Event<T extends keyof ClientEvents> = {
   eventName?: T

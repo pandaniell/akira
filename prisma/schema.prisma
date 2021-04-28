@@ -12,7 +12,7 @@ generator client {
 
 model Guild {
   id        String   @id
-  prefix    String   @default(value: "!a ")
+  prefix    String   @default(value: "!a")
   language  Language @default(en)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz

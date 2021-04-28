@@ -1,10 +1,11 @@
 import Fuse from "fuse.js"
 import i18next from "i18next"
+import { Args, Lexer, longStrategy, Parser } from "lexure"
 import type { Event } from "../utilities/loadCommandsAndEvents"
 
 export const event: Event<"message"> = {
   async run(message, _client, commands, prisma) {
-    const { author, guild, channel, client, content } = message
+    const { author, guild, channel, client, cleanContent } = message
 
     if (author.bot || !guild || channel.type !== "text" || !client.user) {
       return
@@ -27,12 +28,20 @@ export const event: Event<"message"> = {
       rejectOnNotFound: true,
     })
 
-    const [commandName, ...args] = content
-      .slice(config.prefix.length)
-      .trim()
-      .split(/ +/)
+    const lexer = new Lexer(cleanContent)
+    const res = lexer.lexCommand(s => (s.startsWith(config.prefix) ? 1 : null))
 
-    if (!content.startsWith(config.prefix)) {
+    if (!res) {
+      return
+    }
+
+    const tokens = res[1]
+    const parser = new Parser(tokens()).setUnorderedStrategy(longStrategy())
+    const out = parser.parse()
+    const args = new Args(out)
+    const commandName = args.single()
+
+    if (!commandName) {
       return
     }
 
@@ -57,8 +66,8 @@ export const event: Event<"message"> = {
 
       if (searchResult) {
         response += t("validation:command.suggestion", {
-          suggested: searchResult.item,
           prefix: config.prefix,
+          suggested: searchResult.item,
         })
       }
 
@@ -97,13 +106,13 @@ export const event: Event<"message"> = {
       }
     }
 
-    if (command.args) {
+    if (typeof command.resolveArgs === "function") {
       const resolvedArgs = await command.resolveArgs(args, message)
 
       if (!resolvedArgs && command.argsRequired) {
         const response = t("validation:command.usage", {
           prefix: config.prefix,
-          command: command.name,
+          commandName: command.name,
           usage: t(command.usage),
         })
 

@@ -2,7 +2,7 @@
   "command": {
     "invalid": "**{{command}}** is geen geldig commando",
     "suggestion": ", bedoelde je misschien: **{{suggested}}**?\nJe kan `{{prefix}}help {{suggested}}` sturen voor meer info over dit commando",
-    "usage": "Je mist een aantal waarde(s), gebruik dit commando op de volgende manier: `{{prefix}}{{command}} <{{usage}}>`"
+    "usage": "Je mist een aantal waarde(s), gebruik dit commando op de volgende manier: `{{prefix}}{{commandName}} <{{usage}}>`"
   },
   "permissions": {
     "client": "Ik heb niet genoeg recht(en) voor dit commando: `{{permissions}}`",
