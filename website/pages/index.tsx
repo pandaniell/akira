@@ -5,6 +5,7 @@ import { useTransform, useViewportScroll } from "framer-motion"
 import Head from "next/head"
 import Dashboard from "../components/Dashboard"
 import Features from "../components/Features"
+import Header from "../components/Header"
 import MotionBox from "../components/MotionBox"
 
 const Home = () => {
@@ -21,6 +22,7 @@ const Home = () => {
           content="🤖 Akira is a multipurpose Discord bot."
         />
       </Head>
+      <Header />
       <Box h="100vh">
         <Center
           h="100%"
