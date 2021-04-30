@@ -8,18 +8,14 @@ import {
 import NextChakraLink from "./NextChakraLink"
 
 const Header = () => (
-  <chakra.header
-    pos="fixed"
-    w="100%"
-    py={{ base: "1rem", sm: "1.5rem", lg: "3rem" }}
-  >
+  <chakra.header pos="fixed" w="100%" py={{ base: "1rem", sm: "1.5rem" }}>
     <Container maxW="5xl" d="flex" alignItems="center">
       <NextChakraLink href="/" maxW="80px">
         <Image
           src="/static/images/logo.svg"
           alt="Akira logo"
+          w="80px"
           maxW="100%"
-          h="auto"
         />
       </NextChakraLink>
       <chakra.nav ml="auto">
