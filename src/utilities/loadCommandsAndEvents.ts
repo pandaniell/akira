@@ -9,7 +9,8 @@ import type { TFunction } from "i18next"
 import type { Args } from "lexure"
 import { parse, sep } from "path"
 import { logger } from "./logger"
-import { globAsync } from "./misc"
+import { globAsync, ValueOf } from "./misc"
+import type { ParseError } from "./parser"
 
 type CommandExample = {
   usage: string
@@ -20,7 +21,10 @@ type CommandWithArgsProps<T> = {
   argsRequired: boolean
   usage: string
   examples?: CommandExample[]
-  resolveArgs(args: Args, message: Message): Promise<T>
+  resolveArgs(
+    args: Args,
+    message: Message
+  ): Promise<T | ValueOf<typeof ParseError>>
 }
 
 export type Command<T = void> = {

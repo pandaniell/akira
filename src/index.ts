@@ -1,10 +1,12 @@
+import "dotenv/config"
+import "make-promises-safe"
+// @TODO: Remove once discord.js v13 is released
+import "discord-reply"
 import fastifySession from "@mgcrea/fastify-session"
 import RedisStore from "@mgcrea/fastify-session-redis-store"
 import { Language, PrismaClient } from "@prisma/client"
 import { ApolloServer } from "apollo-server-fastify"
 import { Intents, Client } from "discord.js"
-import "dotenv/config"
-import "make-promises-safe"
 import fastify from "fastify"
 import fastifyCookie from "fastify-cookie"
 import fastifyCors from "fastify-cors"
@@ -58,6 +60,10 @@ const main = async () => {
     backend: {
       loadPath: join(process.cwd(), "locales", "{{lng}}", "{{ns}}.json"),
     },
+    interpolation: {
+      escapeValue: false,
+    },
+    returnObjects: true,
   })
 
   const intents = new Intents(Intents.ALL).remove([

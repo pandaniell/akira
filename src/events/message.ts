@@ -2,6 +2,8 @@ import Fuse from "fuse.js"
 import i18next from "i18next"
 import { Args, Lexer, longStrategy, Parser } from "lexure"
 import type { Event } from "../utilities/loadCommandsAndEvents"
+import { logger } from "../utilities/logger"
+import { ParseError } from "../utilities/parser"
 
 export const event: Event<"message"> = {
   async run(message, _client, commands, prisma) {
@@ -109,7 +111,19 @@ export const event: Event<"message"> = {
     if (typeof command.resolveArgs === "function") {
       const resolvedArgs = await command.resolveArgs(args, message)
 
-      if (!resolvedArgs && command.argsRequired) {
+      if (resolvedArgs === ParseError.PARSE_FAILURE) {
+        return logger.warn("parse error")
+      }
+
+      if (resolvedArgs === ParseError.NO_INPUT_GIVEN) {
+        return logger.warn("No input given")
+      }
+
+      if (resolvedArgs === ParseError.TOO_MANY_TRIES) {
+        return logger.warn("Too many retries")
+      }
+
+      if (command.argsRequired) {
         const response = t("validation:command.usage", {
           prefix: config.prefix,
           commandName: command.name,
