@@ -1,16 +1,22 @@
-import type { PrismaClient } from "@prisma/client"
-import type {
+import {
   Client,
   ClientEvents,
+  Collection,
   Message,
   PermissionResolvable,
 } from "discord.js"
-import type { TFunction } from "i18next"
-import type { Args } from "lexure"
 import { parse, sep } from "path"
 import { logger } from "./logger"
 import { globAsync, ValueOf } from "./misc"
 import type { ParseError } from "./parser"
+import type { PrismaClient } from "@prisma/client"
+import type { TFunction } from "i18next"
+import type { Args } from "lexure"
+
+type LoadCommandsAndEventsOptions = Record<
+  "commandsBaseDir" | "eventsBaseDir",
+  string
+>
 
 type CommandExample = {
   usage: string
@@ -34,102 +40,74 @@ export type Command<T = void> = {
   description: string
   clientPermissions?: PermissionResolvable[]
   memberPermissions?: PermissionResolvable[] | "same-as-client"
-  execute(
+  execute: (
     message: Message,
     args: T,
     prisma: PrismaClient,
     t: TFunction
-  ): Promise<unknown>
+  ) => Promise<unknown>
   // eslint-disable-next-line @typescript-eslint/ban-types
 } & (T extends void ? {} : CommandWithArgsProps<T>)
 
 export type Event<T extends keyof ClientEvents> = {
-  eventName?: T
-  listenOnce?: boolean
-  run(
+  name?: T
+  run: (
     ...args: [
       ...ClientEvents[T],
       Client,
-      Map<string, Command<unknown>>,
-      PrismaClient
+      PrismaClient,
+      Collection<string, Command<unknown>>
     ]
-  ): Promise<unknown>
+  ) => Promise<unknown>
 }
 
-type CommandModule = {
-  command: Command<unknown>
-}
-
-type EventModule = {
-  event: Event<keyof ClientEvents>
-}
-
-type Module = CommandModule | EventModule
-
-type BaseDirectories = {
-  commandsBaseDir: string
-  eventsBaseDir: string
-}
-
-type EventWithRequiredEventName = Omit<
-  Event<keyof ClientEvents>,
-  "eventName"
-> & {
-  eventName: NonNullable<Event<keyof ClientEvents>["eventName"]>
-}
-
-type CommandsAndEvents = {
-  commands: Map<string, Command<unknown>>
-  events: Array<EventWithRequiredEventName>
-}
-
-const isCommandModule = (module: Module): module is CommandModule => {
-  return "command" in module
-}
-
-const isEventModule = (module: Module): module is EventModule => {
-  return "event" in module
-}
-
-export const loadCommandsAndEvents = async ({
+export async function loadCommandsAndEvents({
   commandsBaseDir,
   eventsBaseDir,
-}: BaseDirectories) => {
-  const filePaths = await globAsync(
-    `{${commandsBaseDir},${eventsBaseDir}}/**/*.{ts,js}`
-  )
+}: LoadCommandsAndEventsOptions) {
+  const commands = new Collection<string, Command<unknown>>()
+  const events: Array<Event<keyof ClientEvents>> = []
 
-  const commandsAndEvents = filePaths.reduce<Promise<CommandsAndEvents>>(
-    async (previousValues, path) => {
-      const { commands, events } = await previousValues
-      const module: Module = await import(path)
-      const parsedPath = parse(path)
+  const commandPaths = await globAsync(commandsBaseDir)
 
-      if (isEventModule(module)) {
-        const eventName =
-          module.event.eventName ?? (parsedPath.name as keyof ClientEvents)
+  for (const commandPath of commandPaths) {
+    const { command }: Partial<Record<"command", Command<unknown>>> =
+      await import(commandPath)
 
-        events.push({ ...module.event, eventName })
-        logger.info(`✅ Successfully loaded event ${eventName}`)
-      } else if (isCommandModule(module)) {
-        const category = parsedPath.dir.split(sep).pop()
-        const name = module.command.name ?? parsedPath.name
+    if (!command) {
+      throw new Error(
+        `File ${commandPath} must export a named object "command"`
+      )
+    }
 
-        const command = { ...module.command, name, category }
+    const parsedCommandPath = parse(commandPath)
+    const commandName = command.name ?? parsedCommandPath.name
+    const category = command.category ?? parsedCommandPath.dir.split(sep).pop()
+    const populatedCommand = { ...command, name: commandName, category }
 
-        commands.set(name, command)
-        module.command.aliases?.forEach(alias => commands.set(alias, command))
-        logger.info(`✅ Successfully loaded command ${name}`)
-      } else {
-        throw new Error(
-          `File ${path} must export a named object "command" or "event"`
-        )
-      }
+    commands.set(commandName, populatedCommand)
+    command.aliases?.forEach((alias) => commands.set(alias, populatedCommand))
 
-      return { commands, events }
-    },
-    Promise.resolve({ commands: new Map(), events: [] })
-  )
+    logger.info(`✅ Successfully loaded ${commandName} command`)
+  }
 
-  return commandsAndEvents
+  const eventsPaths = await globAsync(eventsBaseDir)
+
+  for (const eventPath of eventsPaths) {
+    const { event }: Partial<Record<"event", Event<keyof ClientEvents>>> =
+      await import(eventPath)
+
+    if (!event) {
+      throw new Error(`File ${eventPath} must export a named object "event"`)
+    }
+
+    const parsedEventPath = parse(eventPath)
+    const eventName = event.name ?? (parsedEventPath.name as keyof ClientEvents)
+
+    events.push({ ...event, name: eventName })
+
+    logger.info(`✅ Successfully loaded ${eventName} event`)
+  }
+
+  return { commands, events }
 }

@@ -1,12 +1,12 @@
 import Fuse from "fuse.js"
 import i18next from "i18next"
 import { Args, Lexer, longStrategy, Parser } from "lexure"
-import type { Event } from "../utilities/loadCommandsAndEvents"
 import { logger } from "../utilities/logger"
 import { ParseError } from "../utilities/parser"
+import type { Event } from "../utilities/loadCommandsAndEvents"
 
 export const event: Event<"message"> = {
-  async run(message, _client, commands, prisma) {
+  async run(message, _client, prisma, commands) {
     const { author, guild, channel, client, cleanContent } = message
 
     if (author.bot || !guild || channel.type !== "text" || !client.user) {
@@ -31,36 +31,33 @@ export const event: Event<"message"> = {
     })
 
     const lexer = new Lexer(cleanContent)
-    const res = lexer.lexCommand(s => (s.startsWith(config.prefix) ? 1 : null))
+    const res = lexer.lexCommand((matchPrefix) =>
+      matchPrefix.startsWith(config.prefix) ? 1 : null
+    )
 
     if (!res) {
       return
     }
 
-    const tokens = res[1]
+    const [commandName, tokens] = res
     const parser = new Parser(tokens()).setUnorderedStrategy(longStrategy())
     const out = parser.parse()
     const args = new Args(out)
-    const commandName = args.single()
-
-    if (!commandName) {
-      return
-    }
 
     const t = i18next.getFixedT(config.language)
 
-    const command = commands.get(commandName.toLowerCase())
+    const command = commands.get(commandName.value.toLowerCase())
 
     if (!command) {
       // Do nothing if provided commandName only contains a single character
-      const isRepeatedChar = new Set([...commandName]).size === 1
+      const isRepeatedChar = new Set([...commandName.value]).size === 1
 
       if (isRepeatedChar) {
         return
       }
 
       const fuse = new Fuse([...commands.keys()])
-      const [searchResult] = fuse.search(commandName.toLowerCase(), {
+      const [searchResult] = fuse.search(commandName.value.toLowerCase(), {
         limit: 1,
       })
 
@@ -123,7 +120,7 @@ export const event: Event<"message"> = {
         return logger.warn("Too many retries")
       }
 
-      if (command.argsRequired) {
+      if (command.argsRequired && !resolvedArgs) {
         const response = t("validation:command.usage", {
           prefix: config.prefix,
           commandName: command.name,

@@ -8,9 +8,7 @@ type CommandMap = { [category: string]: Array<Command<unknown>> }
 
 export const globAsync = promisify(glob)
 
-export const sortCommandsByCategory = (
-  commands: Map<string, Command<unknown>>
-) => {
+export function sortCommandsByCategory(commands: Array<Command<unknown>>) {
   const commandMap: CommandMap = {}
 
   for (const command of commands.values()) {
@@ -19,7 +17,7 @@ export const sortCommandsByCategory = (
 
     if (commandMapEntry) {
       const commandInCategory = commandMapEntry.some(
-        command => command.name !== command.name
+        (cmd) => cmd.name !== cmd.name
       )
 
       if (!commandInCategory) {
@@ -30,8 +28,8 @@ export const sortCommandsByCategory = (
     }
   }
 
-  return Object.entries(commandMap).map(([category, commands]) => ({
+  return Object.entries(commandMap).map(([category, categorisedCommands]) => ({
     category,
-    commands,
+    commands: categorisedCommands,
   }))
 }

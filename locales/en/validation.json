@@ -1,6 +1,6 @@
 {
   "command": {
-    "invalid": "**{{command}}** is not a valid command",
+    "invalid": "**{{command.value}}** is not a valid command",
     "suggestion": ", did you mean: **{{suggested}}**?\nYou can send `{{prefix}}help {{suggested}}` for more information about this command",
     "usage": "Invalid argument(s) provided for this command, the correct usage would be: `{{prefix}}{{commandName}} {{usage}}`"
   },

@@ -1,24 +1,24 @@
 import "dotenv/config"
+import "./global"
 import "make-promises-safe"
 // @TODO: Remove once discord.js v13 is released
 import "discord-reply"
-import fastifySession from "@mgcrea/fastify-session"
 import RedisStore from "@mgcrea/fastify-session-redis-store"
+import fastifySession from "@mgcrea/fastify-session"
 import { Language, PrismaClient } from "@prisma/client"
 import { ApolloServer } from "apollo-server-fastify"
 import { Intents, Client } from "discord.js"
-import fastify from "fastify"
 import fastifyCookie from "fastify-cookie"
 import fastifyCors from "fastify-cors"
 import fastifyPassport from "fastify-passport"
+import fastify from "fastify"
 import fs from "fs/promises"
 import { applyMiddleware } from "graphql-middleware"
-import i18next from "i18next"
 import Backend from "i18next-fs-backend"
+import i18next from "i18next"
 import Strategy, { Profile } from "passport-discord"
 import { join, parse } from "path"
-import { __DEV__, COOKIE_NAME, SESSION_TTL } from "./constants"
-import type { Context } from "./context"
+import { COOKIE_NAME, SESSION_TTL } from "./constants"
 import { permissions } from "./permissions"
 import { redis } from "./redis"
 import { schema } from "./schema"
@@ -26,10 +26,11 @@ import { cacheMiddleware } from "./utilities/cacheMiddleware"
 import { loadCommandsAndEvents } from "./utilities/loadCommandsAndEvents"
 import { logger } from "./utilities/logger"
 import { globAsync } from "./utilities/misc"
+import type { Context } from "./context"
 
-const main = async () => {
+async function main() {
   const prisma = new PrismaClient({
-    log: __DEV__ ? ["query", "error"] : ["info", "warn"],
+    log: __DEV__ ? ["error", "query"] : ["info", "warn"],
   })
 
   prisma.$use(
@@ -38,7 +39,7 @@ const main = async () => {
       action: "findUnique",
       keys: ["prefix", "language"],
       defaultValues: {
-        prefix: process.env.PREFIX,
+        prefix: process.env.DISCORD_BOT_PREFIX,
         language: Language.en,
       },
       ttlInSeconds: 15,
@@ -46,12 +47,7 @@ const main = async () => {
   )
 
   const paths = await globAsync(`${join(process.cwd(), "locales")}/**/*.json`)
-
-  const namespaces = paths.map(path => {
-    const { name } = parse(path)
-
-    return name
-  })
+  const namespaces = paths.map((path) => parse(path).name)
 
   await i18next.use(Backend).init({
     preload: await fs.readdir(join(process.cwd(), "locales")),
@@ -80,13 +76,15 @@ const main = async () => {
   })
 
   const { commands, events } = await loadCommandsAndEvents({
-    commandsBaseDir: join(__dirname, "commands"),
-    eventsBaseDir: join(__dirname, "events"),
+    commandsBaseDir: `${join(__dirname, "commands")}/**/*.{js,ts}`,
+    eventsBaseDir: `${join(__dirname, "events")}/**/*.{js,ts}`,
   })
 
-  events.forEach(({ eventName, listenOnce, run }) => {
-    client[listenOnce ? "once" : "on"](eventName, (...args) =>
-      run(...args, client, commands, prisma)
+  events.forEach(({ name, run }) => {
+    const listenerType = name === "ready" ? "once" : "on"
+
+    client[listenerType](name!, (...args) =>
+      run(...args, client, prisma, commands)
     )
   })
 
@@ -103,18 +101,18 @@ const main = async () => {
   })
 
   fastifyPassport.registerUserSerializer<Profile, Profile>(
-    async profile => profile
+    async (profile) => profile
   )
 
   fastifyPassport.registerUserDeserializer<Profile, Profile>(
-    async profile => profile
+    async (profile) => profile
   )
 
   fastifyPassport.use(
     new Strategy(
       {
-        clientID: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
+        clientID: process.env.DISCORD_CLIENT_ID,
+        clientSecret: process.env.DISCORD_CLIENT_SECRET,
         callbackURL: `${process.env.SERVER_URL}/auth/discord/callback`,
         scope: ["identify", "guilds"],
       },
@@ -166,7 +164,7 @@ const main = async () => {
     )
     .listen(process.env.PORT ?? 4000, "0.0.0.0")
 
-  client.login(process.env.TOKEN)
+  client.login()
 }
 
 main()

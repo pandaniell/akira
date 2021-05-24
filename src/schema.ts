@@ -1,5 +1,5 @@
-import { makeSchema, queryComplexityPlugin } from "nexus"
 import { nexusPrisma } from "nexus-plugin-prisma"
+import { makeSchema, queryComplexityPlugin } from "nexus"
 import path from "path"
 import * as types from "./types"
 
@@ -29,5 +29,5 @@ export const schema = makeSchema({
     export: "Context",
   },
   shouldExitAfterGenerateArtifacts:
-    process.env.SHOULD_EXIT_AFTER_GENERATE_ARTIFACTS === "true",
+    process.env["SHOULD_EXIT_AFTER_GENERATE_ARTIFACTS"] === "true",
 })

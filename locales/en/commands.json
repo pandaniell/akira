@@ -2,6 +2,7 @@
   "8ball": {
     "desc": "Get an answer to your yes-no question.",
     "usage": "<question>",
+    "invalid": "Make sure to end your question with a question mark.",
     "answers": [
       "It is certain.",
       "It is decidedly so.",
