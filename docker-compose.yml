@@ -5,10 +5,10 @@ services:
       - 5432:5432
     volumes:
       - ./pgdata:/var/lib/postgresql/data
-    environment: 
-     - POSTGRES_USER=ailuropoda
-     - POSTGRES_PASSWORD=melanoleuca
-     - POSTGRES_DB=akira_dev
+    environment:
+      - POSTGRES_USER=ailuropoda
+      - POSTGRES_PASSWORD=melanoleuca
+      - POSTGRES_DB=akira
   redis:
     image: redis:alpine
     tty: true

@@ -2,13 +2,13 @@ import glob from "glob"
 import { promisify } from "util"
 import type { Command } from "./loadCommandsAndEvents"
 
+export type ValueOf<T> = T[keyof T]
+
 type CommandMap = { [category: string]: Array<Command<unknown>> }
 
 export const globAsync = promisify(glob)
 
-export const sortCommandsByCategory = (
-  commands: Map<string, Command<unknown>>
-) => {
+export function sortCommandsByCategory(commands: Array<Command<unknown>>) {
   const commandMap: CommandMap = {}
 
   for (const command of commands.values()) {
@@ -16,11 +16,11 @@ export const sortCommandsByCategory = (
     const commandMapEntry = commandMap[category]
 
     if (commandMapEntry) {
-      const isCommandInCategory = commandMapEntry.some(
-        command => command.name !== command.name
+      const commandInCategory = commandMapEntry.some(
+        (cmd) => cmd.name !== cmd.name
       )
 
-      if (!isCommandInCategory) {
+      if (!commandInCategory) {
         commandMapEntry.push(command)
       }
     } else {
@@ -28,8 +28,8 @@ export const sortCommandsByCategory = (
     }
   }
 
-  return Object.entries(commandMap).map(([category, commands]) => ({
+  return Object.entries(commandMap).map(([category, categorisedCommands]) => ({
     category,
-    commands,
+    commands: categorisedCommands,
   }))
 }

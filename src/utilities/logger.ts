@@ -1,14 +1,13 @@
 import ecsFormat from "@elastic/ecs-pino-format"
-import pino from "pino"
 import pinoElastic from "pino-elasticsearch"
-import { __DEV__ } from "../constants"
+import pino from "pino"
 
 ecsFormat()
 
-const streamToElastic = () => {
+function streamToElastic() {
   return pinoElastic({
     consistency: "one",
-    node: process.env.BONSAI_URL,
+    node: process.env["BONSAI_URL"],
     "es-version": 7,
   })
 }
@@ -21,7 +20,7 @@ const prettyPrint = {
 
 export const logger = pino(
   {
-    name: process.env.npm_package_name,
+    name: process.env["npm_package_name"],
     ...(__DEV__ ? { prettyPrint } : ecsFormat),
   },
   !__DEV__ && streamToElastic()

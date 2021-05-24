@@ -1,1 +1,28 @@
-{}
+{
+  "8ball": {
+    "desc": "Krijg een antwoord op je ja-nee vraag.",
+    "usage": "<vraag>",
+    "answers": [
+      "Het is zeker.",
+      "Het is zeker waar.",
+      "Zonder twijfel.",
+      "Ja – zonder twijfel.",
+      "Daar kun je op rekenen.",
+      "Zoals ik het zie, ja.",
+      "Waarschijnlijk.",
+      "Waarschijnlijk wel.",
+      "Ja.",
+      "De aanwijzingen duiden op ja.",
+      "Antwoord onduidelijk, probeer het opnieuw.",
+      "Probeer het later nog eens.",
+      "Dat kan ik je nu beter niet vertellen.",
+      "Ik kan dat niet voorspellen op dit moment.",
+      "Concentreer je en probeer het opnieuw.",
+      "Reken daar maar niet op.",
+      "Mijn antwoord is nee.",
+      "Mijn bronnen zeggen nee.",
+      "Waarschijnlijk niet.",
+      "Erg betwijfelbaar."
+    ]
+  }
+}
