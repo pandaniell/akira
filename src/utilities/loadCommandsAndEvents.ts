@@ -1,3 +1,4 @@
+import type { PrismaClient } from "@prisma/client"
 import {
   Client,
   ClientEvents,
@@ -5,13 +6,12 @@ import {
   Message,
   PermissionResolvable,
 } from "discord.js"
+import type { TFunction } from "i18next"
+import type { Args } from "lexure"
 import { parse, sep } from "path"
 import { logger } from "./logger"
 import { globAsync, ValueOf } from "./misc"
 import type { ParseError } from "./parser"
-import type { PrismaClient } from "@prisma/client"
-import type { TFunction } from "i18next"
-import type { Args } from "lexure"
 
 type LoadCommandsAndEventsOptions = Record<
   "commandsBaseDir" | "eventsBaseDir",

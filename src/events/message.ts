@@ -1,9 +1,9 @@
 import Fuse from "fuse.js"
 import i18next from "i18next"
 import { Args, Lexer, longStrategy, Parser } from "lexure"
+import type { Event } from "../utilities/loadCommandsAndEvents"
 import { logger } from "../utilities/logger"
 import { ParseError } from "../utilities/parser"
-import type { Event } from "../utilities/loadCommandsAndEvents"
 
 export const event: Event<"message"> = {
   async run(message, _client, prisma, commands) {

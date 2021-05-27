@@ -1,6 +1,6 @@
+import type { Message } from "discord.js"
 import { Args, fail, finish, loop1Async, loopAsync, Result, step } from "lexure"
 import type { ValueOf } from "./misc"
-import type { Message } from "discord.js"
 
 type Parser<T> = (x: string) => Result<T, ValueOf<typeof ParseError>>
 

@@ -1,6 +1,6 @@
 import ecsFormat from "@elastic/ecs-pino-format"
-import pinoElastic from "pino-elasticsearch"
 import pino from "pino"
+import pinoElastic from "pino-elasticsearch"
 
 ecsFormat()
 

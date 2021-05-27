@@ -1,5 +1,5 @@
-import { redis } from "../redis"
 import type { Prisma } from "@prisma/client"
+import { redis } from "../redis"
 
 type CacheMiddlewareOptions = {
   model: Prisma.ModelName
