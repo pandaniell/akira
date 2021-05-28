@@ -30,7 +30,7 @@ type CommandWithArgsProps<T> = {
   resolveArgs(
     args: Args,
     message: Message
-  ): Promise<T | ValueOf<typeof ParseError>>
+  ): Promise<Readonly<T> | (string | null) | ValueOf<typeof ParseError>>
 }
 
 export type Command<T = void> = {
