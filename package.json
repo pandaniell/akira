@@ -109,7 +109,7 @@
     "passport-discord": "^0.1.4",
     "pino": "^6.11.3",
     "pino-elasticsearch": "^5.4.0",
-    "tslib": "^2.2.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
