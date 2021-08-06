@@ -37,9 +37,9 @@ async function main() {
     cacheMiddleware({
       model: "Guild",
       action: "findUnique",
-      keys: ["prefix", "language"],
+      keys: ["botPrefix", "language"],
       defaultValues: {
-        prefix: process.env.DISCORD_BOT_PREFIX,
+        botPrefix: process.env.DISCORD_BOT_PREFIX,
         language: Language.en,
       },
       ttlInSeconds: 15,

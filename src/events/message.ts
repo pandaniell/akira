@@ -21,18 +21,22 @@ export const event: Event<"message"> = {
 
     const config = await prisma.guild.findUnique({
       where: {
-        id: guild.id,
+        discordGuildId: guild.id,
       },
       select: {
-        prefix: true,
+        botPrefix: true,
         language: true,
       },
       rejectOnNotFound: true,
     })
 
-    const lexer = new Lexer(cleanContent)
+    const lexer = new Lexer(cleanContent).setQuotes([
+      ['"', '"'],
+      ["“", "”"],
+    ])
+
     const res = lexer.lexCommand((matchPrefix) =>
-      matchPrefix.startsWith(config.prefix) ? 1 : null
+      matchPrefix.startsWith(config.botPrefix) ? 1 : null
     )
 
     if (!res) {
@@ -65,7 +69,7 @@ export const event: Event<"message"> = {
 
       if (searchResult) {
         response += t("validation:command.suggestion", {
-          prefix: config.prefix,
+          prefix: config.botPrefix,
           suggested: searchResult.item,
         })
       }
@@ -122,7 +126,7 @@ export const event: Event<"message"> = {
 
       if (command.argsRequired && !resolvedArgs) {
         const response = t("validation:command.usage", {
-          prefix: config.prefix,
+          prefix: config.botPrefix,
           commandName: command.name,
           usage: t(command.usage),
         })
