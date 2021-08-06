@@ -11,13 +11,38 @@ generator client {
 }
 
 model Guild {
-  id        String   @id
-  prefix    String   @default(value: "!")
-  language  Language @default(en)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  discordGuildId String   @id @map("discord_guild_id")
+  botPrefix      String   @default(value: "!") @map("bot_prefix")
+  language       Language @default(en)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   @@map("guilds")
+}
+
+model Question {
+  id               Int      @id @default(autoincrement())
+  discordMessageId String   @unique @map("discord_message_id")
+  originalAnswers  Json     @map("original_answers") @db.JsonB
+  answers          Answer[]
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("questions")
+}
+
+model Answer {
+  id            Int      @id @default(autoincrement())
+  discordUserId String   @map("discord_author_id")
+  /// Refers to position in Question.originalAnswers
+  index         Int      @db.SmallInt
+  question      Question @relation(fields: [questionId], references: [id])
+  questionId    Int      @map("question_id")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([discordUserId, questionId])
+  @@map("answers")
 }
 
 enum Language {
